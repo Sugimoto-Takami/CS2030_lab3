@@ -3,12 +3,13 @@
 public class ArriveEvent implements Event {
     private final Customer customer;
 
+    // ArriveEventに関しては, timeはcustomerから取ればよい.
     public ArriveEvent(Customer customer) {
         this.customer = customer;
     }
 
-    @Override
-    public double getEventTime() {
+    @Override 
+    public double getTime() {
         return customer.getArrivalTime();
     }
 
@@ -45,9 +46,9 @@ public class ArriveEvent implements Event {
 
         for (int i = 0; i < servers.size(); i++) {
             Server server = servers.get(i);
-            if (server.isAvailable(customer.getArrivalTime())) {
+            if (server.isAvailable(this.getTime())) {
                 isServed = true;
-                serveEvent = new ServeEvent(this.customer, server, false, 0.0);
+                serveEvent = new ServeEvent(this.getTime(), this.customer, server, false);
                 newEvents = newEvents.add(serveEvent);
                 break;
             }
@@ -59,7 +60,7 @@ public class ArriveEvent implements Event {
                 if (server.isNotFull()) {
                     isWait = true;
                     // server = server.queueStatus(1);
-                    waitEvent = new WaitEvent(this.customer, server);
+                    waitEvent = new WaitEvent(this.getTime(), this.customer, server);
                     newEvents = newEvents.add(waitEvent);
                     break;
                 }
@@ -77,6 +78,6 @@ public class ArriveEvent implements Event {
     @Override
     public String output() {
         return String.format("%.3f %d arrives\n",
-                customer.getArrivalTime(), customer.getId());
+                this.getTime(), customer.getId());
     }
 }

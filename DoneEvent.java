@@ -1,18 +1,19 @@
 // DoneEvent.java
 public class DoneEvent implements Event {
+    private final double time;
     private final Customer customer;
     private final Server server;
-    private final double serveStartTime;
+    // private final double serveStartTime;
 
-    public DoneEvent(Customer customer, Server server, double serveStartTime) {
+    public DoneEvent(double time, Customer customer, Server server) {
+        this.time = time;
         this.customer = customer;
         this.server = server;
-        this.serveStartTime = serveStartTime;
     }
 
-    @Override
-    public double getEventTime() {
-        return serveStartTime + new DefaultServiceTime().get();
+    @Override 
+    public double getTime() {
+        return this.time;
     }
 
     @Override
@@ -37,13 +38,12 @@ public class DoneEvent implements Event {
 
     @Override
     public Pair<ImList<Event>, ImList<Server>> process(ImList<Server> servers) {
-        // update server's condition?
         return new Pair<>(new ImList<Event>(), servers);
     }
 
     @Override
     public String output() {
         return String.format("%.3f %d done serving by %d\n", 
-        this.getEventTime(), customer.getId(), server.getId());
+        this.time, customer.getId(), server.getId());
     }
 }

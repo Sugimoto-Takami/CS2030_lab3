@@ -23,7 +23,7 @@ public class Simulator {
         ImList<Server> tempServers = new ImList<>();
         for (int i = 0; i < numOfServers; i++) {
             tempServers = tempServers.add(
-                new Server(0.0, 0, qmax, i + 1)
+                new Server(0.0, 0.0, 0.0, new ImList<Customer>(), 0, qmax, i + 1)
                 );
         }
         return tempServers;
@@ -58,11 +58,6 @@ public class Simulator {
                 timeWait += newEvent.getWaitTime();
                 numServed += newEvent.served();
                 numLeft += newEvent.left();
-                // if (newEvent instanceof ServeEvent) {
-                //     numServed++;
-                // } else if (newEvent instanceof LeaveEvent) {
-                //     numLeft++;
-                // }
             }
 
             ImList<Server> updatedServers = newEvents.second();
@@ -70,7 +65,10 @@ public class Simulator {
 
             output += event.output();  // THIS IS!
         }
-        double averageWaitTime =  timeWait / numServed;
+        double averageWaitTime = 0.000;
+        if (numServed != 0) {
+            averageWaitTime += timeWait / numServed;
+        }
         output += String.format("[%.3f %d %d]", averageWaitTime, numServed, numLeft);
         return output;
     }

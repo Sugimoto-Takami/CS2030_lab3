@@ -6,8 +6,8 @@ public class LeaveEvent implements Event {
         this.customer = customer;
     }
 
-    @Override
-    public double getEventTime() {
+    @Override 
+    public double getTime() {
         return customer.getArrivalTime();
     }
 
@@ -39,7 +39,7 @@ public class LeaveEvent implements Event {
     @Override
     public String output() {
         return String.format("%.3f %d leaves\n", 
-        customer.getArrivalTime(), customer.getId());
+        this.getTime(), customer.getId());
         
     }
 }
